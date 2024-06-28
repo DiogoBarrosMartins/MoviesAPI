@@ -64,9 +64,10 @@ This project is a REST API for managing movies and genres using the NestJS frame
         "releaseDate": "2023",
         "genres": [
           {
-            "name": "Rock"
+            "name": "Rock",
           }
-        ]
+        ],
+
       }
     ]
     ```
