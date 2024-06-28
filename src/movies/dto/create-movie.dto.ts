@@ -4,7 +4,7 @@ import { Type } from 'class-transformer';
 export class CreateMovieDto {
   @IsInt()
   id: number;
-
+  
   @IsString()
   @IsNotEmpty()
   title: string;

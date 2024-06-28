@@ -26,11 +26,11 @@ export class GenresService {
      return genres.map(genre => plainToClass(Genre, genre))
   }
 
-  async findOne(name: string): Promise<Genre> {
+  async findOne(name: string): Promise<Genre | null> {
     const genre = await this.genreRepository.findOne({
        where: { name }, relations: ['movies']});
     if (!genre) {
-      throw new NotFoundException(`Genre with name ${name} not found`);
+      return null;
     }
     return plainToClass(Genre, genre);
   }
@@ -38,10 +38,10 @@ export class GenresService {
   async update(name: string, updateGenreDto: UpdateGenreDto) {
     const genre = await this.findOne(name);
     if (!genre) {
-      throw new NotFoundException('No movie with that title found, update failed');
+      throw new NotFoundException('No genre with that name found, update failed');
     }
     Object.assign(genre, updateGenreDto);
-    const updatedGenre=  await this.genreRepository.save(genre);
+    const updatedGenre = await this.genreRepository.save(genre);
     return plainToClass(Genre, updatedGenre);
   }
 

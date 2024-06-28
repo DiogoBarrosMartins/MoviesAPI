@@ -5,8 +5,6 @@ import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Repository } from 'typeorm';
 import { Movie } from '../movies/entities/movie.entity';
 import { plainToClass } from 'class-transformer';
-import { Genre } from '../genres/entities/genre.entity';
-
 
 @Injectable()
 export class MoviesService {
@@ -14,8 +12,6 @@ export class MoviesService {
   constructor(
     @InjectRepository(Movie)
     private readonly movieRepository: Repository<Movie>,
-    @InjectRepository(Genre)
-    private readonly genreRepository: Repository<Genre>,
   ) {}
 
   async create(createMovieDto: CreateMovieDto) {
@@ -44,34 +40,14 @@ export class MoviesService {
 
 
   async update(title: string, updateMovieDto: UpdateMovieDto) {
-    const movie = await this.movieRepository.findOne({ where: { title }, relations: ['genres'] });
+    const movie = await this.movieRepository.findOne({ where: { title } });
     if (!movie) {
       throw new NotFoundException('No movie with that title found, update failed');
     }
-
-    const { genres, ...otherUpdates } = updateMovieDto;
-    Object.assign(movie, otherUpdates);
-
-    if (genres) {
-      movie.genres = [];
-      for (const genreDto of genres) {
-        const genreName = genreDto.name;
-        let genre = await this.genreRepository.findOne({ where: { name: genreName } });
-        if (!genre) {
-          genre = new Genre();
-          genre.name = genreName;
-          await this.genreRepository.save(genre);
-        }
-        movie.genres.push(genre);
-      }
-    }
-
+    Object.assign(movie, updateMovieDto);
     const updatedMovie = await this.movieRepository.save(movie);
     return plainToClass(Movie, updatedMovie);
   }
-
-
-
 
 
   async remove(title: string) {
