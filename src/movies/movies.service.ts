@@ -88,15 +88,15 @@ export class MoviesService {
   }
 
 
-  async update(id: string, updateMovieDto: UpdateMovieDto): Promise<Movie> {
+  async update(title: string, updateMovieDto: UpdateMovieDto): Promise<Movie> {
     const { genres: genreDtos, ...updateData } = updateMovieDto;
 
     const movie = await this.movieRepository.findOne({
-      where: { title: id },
+      where: { title: title },
       relations: ['genres'],
     });
     if (!movie) {
-      throw new NotFoundException(`Movie with title ${id} not found`);
+      throw new NotFoundException(`Movie with title ${title} not found`);
     }
 
     if (genreDtos) {
