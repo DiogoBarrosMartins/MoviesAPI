@@ -41,9 +41,17 @@ export class MoviesService {
     return this.movieRepository.save(movie);
   }
 
-  async findAll() {
-    const movies = await this.movieRepository.find({ relations: ['genres'] });
-    return movies.map(movie => plainToClass(Movie, movie));
+  async findAll(page: number = 1, limit: number = 10): Promise<{ data: Movie[], count: number }> {
+    const [data, count] = await this.movieRepository.findAndCount({
+      relations: ['genres'],
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+
+    return {
+      data: data.map(movie => plainToClass(Movie, movie)),
+      count,
+    };
   }
 
   async findOne(title: string): Promise<Movie> {
