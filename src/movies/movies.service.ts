@@ -59,7 +59,21 @@ export class MoviesService {
     return plainToClass(Movie, movie);
   }
 
-  
+  async search(query: string): Promise<Movie[]> {
+    const movies = await this.movieRepository.createQueryBuilder('movie')
+      .leftJoinAndSelect('movie.genres', 'genre')
+      .where('movie.title ILIKE :query', { query: `%${query}%` })
+      .orWhere('genre.name ILIKE :query', { query: `%${query}%` })
+      .getMany();
+
+    if (!movies.length) {
+      throw new NotFoundException(`No movies found with genre or title matching "${query}"`);
+    }
+
+    return movies.map(movie => plainToClass(Movie, movie));
+  }
+
+
   async findById(id: number): Promise<Movie> {
     const movie = await this.movieRepository.findOne({
       where: { id: id },

@@ -22,6 +22,10 @@ export class MoviesController {
     return this.moviesService.findOne(title);
   }
 
+  @Get('/search/:title')
+  search(@Param('title') title: string) {
+    return this.moviesService.search(title);
+  }
 
   @Patch(':title')
   update(@Param('title') title: string, @Body() updateMovieDto: UpdateMovieDto) {
