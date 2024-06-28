@@ -23,7 +23,7 @@ export class GenresService {
 
   async findAll() {
     const genres = await this.genreRepository.find({ relations: ['movies'] });
-     return genres.map(genre => plainToClass(Genre, genre))
+     return genres;
   }
 
   async findOne(name: string): Promise<Genre> {
@@ -32,7 +32,7 @@ export class GenresService {
     if (!genre) {
       throw new NotFoundException(`Genre with name ${name} not found`);
     }
-    return plainToClass(Genre, genre);
+    return genre;
   }
 
   async update(name: string, updateGenreDto: UpdateGenreDto) {
@@ -42,9 +42,10 @@ export class GenresService {
     }
     Object.assign(genre, updateGenreDto);
     const updatedGenre=  await this.genreRepository.save(genre);
-    return plainToClass(Genre, updatedGenre);
+    return  updatedGenre;
   }
 
+  
   async remove(name: string) {
     const genre = await this.findOne(name);
     if(!genre){
