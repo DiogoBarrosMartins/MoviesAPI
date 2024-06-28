@@ -5,7 +5,6 @@ import { Exclude } from 'class-transformer';
 @Entity({ name: 'movies' })
 export class Movie {
   @PrimaryGeneratedColumn()
-  @Exclude()
   id: number;
 
   @Column()
@@ -19,7 +18,7 @@ export class Movie {
 
   
 
-  @ManyToMany(() => Genre, (genre) => genre.movies, { eager:true, cascade:true })
+  @ManyToMany(() => Genre, (genre) => genre.movies, {cascade:true })
   @JoinTable()
   genres: Genre[];
 

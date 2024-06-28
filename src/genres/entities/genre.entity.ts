@@ -1,19 +1,18 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, Unique, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, Unique, ManyToOne, JoinTable } from 'typeorm';
 import { Movie } from '../../movies/entities/movie.entity';
 import { Exclude } from 'class-transformer';
 
 
 @Entity({ name: 'genres' })
 export class Genre {
-  
   @PrimaryGeneratedColumn()
-  @Exclude()
   id: number;
 
   @Column()
   name: string;
   
-  @Exclude()
-  @ManyToMany(() => Movie, movie => movie.genres)
+
+  @ManyToMany(() => Movie, movie => movie.genres, { eager:true})
+  @JoinTable()
   movies: Movie[];
 }
