@@ -12,6 +12,7 @@ export class MoviesService {
   constructor(
     @InjectRepository(Movie)
     private readonly movieRepository: Repository<Movie>,
+    
   ) {}
 
   async create(createMovieDto: CreateMovieDto) {
@@ -36,6 +37,20 @@ export class MoviesService {
     }
 
     return plainToClass(Movie, movie);
+  }
+
+  
+  async findById(id: number): Promise<Movie> {
+    const movie = await this.movieRepository.findOne({
+      where: { id: id },
+      relations: ['genres'],
+    });
+
+    if (!movie) {
+      throw new NotFoundException(`Movie with title ${id} not found`);
+    }
+
+    return movie;
   }
 
 

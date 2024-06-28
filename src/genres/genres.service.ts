@@ -13,12 +13,24 @@ export class GenresService {
   constructor(
     @InjectRepository(Genre)
     private readonly genreRepository: Repository<Genre>,
+    
   ) {}
 
   async create(createGenreDto: CreateGenreDto) {
     const genre = this.genreRepository.create(createGenreDto);
     const savedGenre= await this.genreRepository.save(genre)
     return plainToClass(Genre, savedGenre);
+  }
+
+  async findById(id: number): Promise<Genre> {
+    const genre = await this.genreRepository.findOne({
+      where: { id: id },
+      relations: ['genres'],
+    });
+
+    if (!genre) {
+      throw new NotFoundException(`Movie with title ${genre} not found`);
+    }return genre;
   }
 
   async findAll() {

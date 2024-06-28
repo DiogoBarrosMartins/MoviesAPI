@@ -19,7 +19,7 @@ export class Movie {
 
   
 
-  @ManyToMany(() => Genre, (genre) => genre.movies, { cascade: true })
+  @ManyToMany(() => Genre, (genre) => genre.movies, { eager:true, cascade:true })
   @JoinTable()
   genres: Genre[];
 
