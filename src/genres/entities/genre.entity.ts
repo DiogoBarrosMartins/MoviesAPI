@@ -12,7 +12,8 @@ export class Genre {
 
   @Column()
   name: string;
-
+  
+  @Exclude()
   @ManyToMany(() => Movie, movie => movie.genres)
   movies: Movie[];
 }
