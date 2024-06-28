@@ -5,15 +5,12 @@
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
 [circleci-url]: https://circleci.com/gh/nestjs/nest
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
 
 
 ## Description
-It is yet to decide what to do in case a genre gets changed out of a movie, should it be deleted as well? or should it just stay in the database linked to no movies? 
 
 With this API we can acess a REST API of movies.
-We used NestJS, TypeORM and POSTGREsql
+We used NestJS, TypeORM and postgreSQL  
 To achieve our goals we created the two resources using nest, the movies and the genres. 
 
 
