@@ -60,12 +60,12 @@ export class GenresService {
   
   async remove(name: string) {
     const genre = await this.findOne(name);
-    if(!genre){
-      throw new NotFoundException('No movie with that title found, update failed');
+    if (!genre) {
+      throw new NotFoundException(`No genre with the name "${name}" found`);
     }
-    return await this.genreRepository.remove(genre);
+    await this.genreRepository.remove(genre);
+    return plainToClass(Genre, genre);
   }
-
 
   
 }

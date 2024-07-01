@@ -32,7 +32,7 @@ export class GenresController {
     return this.genresService.update(name, updateGenreDto);
   }
 
-  @Delete(':id')
+  @Delete(':name')
   @ApiAcceptedResponse({description:'Delete a specific genre on our API using its name'})
   remove(@Param('name') name: string) {
     return this.genresService.remove(name);
