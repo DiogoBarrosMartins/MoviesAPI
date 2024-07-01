@@ -95,19 +95,16 @@ export class MoviesService {
     return movie;
   }
 
-
+  
   async update(title: string, updateMovieDto: UpdateMovieDto): Promise<Movie> {
-    const { genres: genreDtos, ...updateData } = updateMovieDto;
-
-    const movie = await this.movieRepository.findOne({
-      where: { title: title },
-      relations: ['genres'],
-    });
+    const movie = await this.findOne(title);
     if (!movie) {
-      throw new NotFoundException(`Movie with title ${title} not found`);
+      throw new NotFoundException(`Movie with ID "${title}" not found.`);
     }
-
-    if (genreDtos) {
+  
+    const { genres: genreDtos, ...movieData } = updateMovieDto;
+  
+    if (genreDtos && Array.isArray(genreDtos)) {
       const genres = await Promise.all(
         genreDtos.map(async (genreDto) => {
           let genre = await this.genresService.findOne(genreDto.name);
@@ -119,10 +116,12 @@ export class MoviesService {
       );
       movie.genres = genres;
     }
-
-    Object.assign(movie, updateData);
+  
+    Object.assign(movie, movieData);
+  
     return this.movieRepository.save(movie);
   }
+  
 
 
   async remove(title: string) {

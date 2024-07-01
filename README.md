@@ -77,41 +77,59 @@ This project is a REST API for managing movies and genres using the NestJS frame
   - **Description:** Adds a new movie.
   - **Request Body:**
     ```json
-    {
-      "title": "Movie Title",
-      "description": "Movie Description",
-      "releaseDate": "2023",
-      "genreNames": ["Genre1", "Genre2"]
+        {
+        "title": "Title",
+        "description": "Description.",
+        "releaseDate": "Year",
+        "genres": [
+            {
+                "name": "Genre 1 name"
+            },
+              {
+                "name": "Genre 2 name"
+            }
+           
+        ]
     }
     ```
   - **Response:**
     ```json
     {
-
-      "title": "Movie Title",
-      "description": "Movie Description",
-      "releaseDate": "2023-01-01",
-      "genres": [
+    "title": "Title",
+    "description": "Description.",
+    "releaseDate": "Date",
+    "genres": [
         {
-          "name": "Genre1"
+            "id": 1,
+            "name": "Genre 1 name"
         },
         {
-          "name": "Genre2"
+            "id": 2,
+            "name": "Genre 2 name"
         }
-      ]
+    ],
+    "id": "movie id"
     }
     ```
 
 - **Update Movie**
-  - **PUT** `/movies/:title`
+  - **PATCH** `/movies/:title`
   - **Description:** Updates the details of a specific movie.
   - **Request Body:**
     ```json
-    {
-      "title": "Updated Movie Title",
-      "description": "Updated Movie Description",
-      "releaseDate": "2023-01-01",
-      "genreNames": ["Genre1", "Genre2"]
+       {
+        "title": "Matrix",
+        "description": "A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.",
+        "releaseDate": "1999",
+        "genres": [
+              {
+                "name": "Action"
+            },
+            {
+                "name": "Roleplay"
+            }
+           
+        ]
     }
     ```
   - **Response:**

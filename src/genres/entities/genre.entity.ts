@@ -13,6 +13,5 @@ export class Genre {
   
 
   @ManyToMany(() => Movie, movie => movie.genres, { eager:true})
-  @JoinTable()
   movies: Movie[];
 }
