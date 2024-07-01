@@ -2,189 +2,106 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
 
+# Movie API
 
-# NestJS Movie API
+A RESTful API for managing a movie database using NestJS, TypeScript, TypeORM, and PostgreSQL. The API supports CRUD operations for movies and genres.
 
-## Description
-This project is a REST API for managing movies and genres using the NestJS framework. The API allows users to perform CRUD operations for movies and genres, search for movies by title or genre, and more.
+## Features
 
-## Requirements
-- Node.js
-- NPM or Yarn or 
-- A SQL database (PostgreSQL, MySQL, etc.)
+- List all movies with pagination.
+- Add a new movie with associated genres.
+- Update movie details and associated genres.
+- Delete a movie.
+- List all genres.
+- Add a new genre.
+- Delete a genre and remove its association from all movies.
+- Search for movies by title or genre.
+
+## Prerequisites
+
+- Node.js (>=14.x)
+- PostgreSQL
 
 ## Installation
 
-1. Clone the repository
+1. Clone the repository:
+
     ```bash
-    git clone https://github.com/DiogoBarrosMartins/MoviesAPI
+    git clone https://github.com/yourusername/movie-api.git
     cd movie-api
     ```
 
-2. Install dependencies
+2. Install the dependencies:
+
     ```bash
     npm install
     ```
 
-3. Configure the database connection
-   - Create a `.env` file in the root directory of the project.
-   - Add the following environment variables to the `.env` file:
-     ```env
-     DATABASE_TYPE=your_database_type # e.g., postgres, mysql
-     DATABASE_HOST=your_database_host
-     DATABASE_PORT=your_database_port
-     DATABASE_USERNAME=your_database_username
-     DATABASE_PASSWORD=your_database_password
-     DATABASE_NAME=your_database_name
-     ```
+3. Create a `.env` file in the root directory and configure your database connection:
 
+    ```env
+    DATABASE_HOST=localhost
+    DATABASE_PORT=5432
+    DATABASE_USER=yourusername
+    DATABASE_PASSWORD=yourpassword
+    DATABASE_NAME=moviedb
+    ```
 
+4. Run the database migrations:
+
+    ```bash
+    npm run typeorm migration:run
+    ```
 
 ## Running the Application
 
-1. Start the server
+1. Start the NestJS application:
+
     ```bash
-     npm run start:dev
+    npm run start:dev
     ```
-   - The server will start on `http://localhost:3000`.
+
+2. The API will be available at `http://localhost:3000`.
+
+## API Documentation
+
+API documentation is available via Swagger. Once the application is running, visit `http://localhost:3000/api` to view and test the API endpoints.
 
 ## API Endpoints
 
 ### Movies
 
-- **List Movies**
-  - **GET** `/movies`
-  - **Description:** Retrieves a list of all movies.
-  - **Response:**
-    ```json
-    [
-      {
-        "title": "Movie Title",
-        "description": "Movie Description",
-        "releaseDate": "2023",
-        "genres": [
-          {
-            "name": "Rock",
-          }
-        ],
-
-      }
-    ]
-    ```
-
-- **Add Movie**
-  - **POST** `/movies`
-  - **Description:** Adds a new movie.
-  - **Request Body:**
-    ```json
-        {
-        "title": "Title",
-        "description": "Description.",
-        "releaseDate": "Year",
-        "genres": [
-            {
-                "name": "Genre 1 name"
-            },
-              {
-                "name": "Genre 2 name"
-            }
-           
-        ]
-    }
-    ```
-  - **Response:**
-    ```json
-    {
-    "title": "Title",
-    "description": "Description.",
-    "releaseDate": "Date",
-    "genres": [
-        {
-            "id": 1,
-            "name": "Genre 1 name"
-        },
-        {
-            "id": 2,
-            "name": "Genre 2 name"
-        }
-    ],
-    "id": "movie id"
-    }
-    ```
-
-- **Update Movie**
-  - **PATCH** `/movies/:title`
-  - **Description:** Updates the details of a specific movie.
-  - **Request Body:**
-    ```json
-       {
-        "title": "Matrix",
-        "description": "A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.",
-        "releaseDate": "1999",
-        "genres": [
-              {
-                "name": "Action"
-            },
-            {
-                "name": "Roleplay"
-            }
-           
-        ]
-    }
-    ```
-  - **Response:**
-    ```json
-    {
-      "title": "Updated Movie Title",
-      "description": "Updated Movie Description",
-      "releaseDate": "2023-01-01",
-      "genres": [
-        {
-          "name": "Genre1"
-        },
-        {
-          "name": "Genre2"
-        }
-      ]
-    }
-    ```
-
-- **Delete Movie**
-  - **DELETE** `/movies/:title`
-  - **Description:** Deletes a specific movie.
+- **GET /movies**: List all movies with pagination.
+  - Query parameters: `page`, `limit`
+- **POST /movies**: Add a new movie.
+  - Request body: `{ "title": "string", "description": "string", "releaseDate": "date", "genres": [{ "name": "string" }] }`
+- **PATCH /movies/:id**: Update a movie by ID.
+  - Request body: `{ "title": "string", "description": "string", "releaseDate": "date", "genres": [{ "name": "string" }] }`
+- **DELETE /movies/:id**: Delete a movie by ID.
+- **GET /movies/search**: Search for movies by title or genre.
+  - Query parameters: `query`
 
 ### Genres
 
-- **List Genres**
-  - **GET** `/genres`
-  - **Description:** Retrieves a list of all genres.
-  - **Response:**
-    ```json
-    [
-      {
-        "name": "Genre Name"
-      }
-    ]
-    ```
+- **GET /genres**: List all genres.
+- **POST /genres**: Add a new genre.
+  - Request body: `{ "name": "string" }`
+- **DELETE /genres/:name**: Delete a genre by name and remove its association from all movies.
 
-- **Add Genre**
-  - **POST** `/genres`
-  - **Description:** Adds a new genre.
-  - **Request Body:**
-    ```json
-    {
-      "name": "Genre Name"
-    }
-    ```
-  - **Response:**
-    ```json
-    {
-      "name": "Genre Name"
-    }
-    ```
+## Request Logging
 
-- **Delete Genre**
-  - **DELETE** `/genres/:name`
-  - **Description:** Deletes a specific genre. The genre will also be removed from all movies that have it.
+Request logging middleware is used to log all incoming requests.
 
+## Data Validation and Error Handling
+
+- The application uses class-validator for data validation.
+- Custom error handling is implemented to provide meaningful error messages.
+
+## Postman Collection
+
+A Postman collection for testing the API endpoints is provided. Import the collection from `postman-collection.json` to your Postman application.
+
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
 
